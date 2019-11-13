@@ -7,10 +7,10 @@
 
 (defonce grpc-java-bindings-per-ns (atom {}))
 
-(spec/def ::port Integer)
+(spec/def ::port int?)
 
 (spec/def ::namespace-path string?)
-(spec/def ::service-name symbol?)
+(spec/def ::service-name (spec/or :symbol symbol? :string string?))
 (spec/def ::service (spec/tuple ::namespace-path ::service-name))
 (spec/def ::services (spec/coll-of ::service))
 
@@ -27,7 +27,7 @@
 (defn- generate-class-name
   "Generate name of Java class implementing service of name `SERVICE-NAME` from within Clojure namespace `NS`"
   [ns-name service-name]
-  (str (csk/->snake_case_symbol ns-name) "." service-name "ServiceImpl"))
+  (str (csk/->snake_case ns-name) "." service-name "ServiceImpl"))
 
 (defmacro implement-grpc-service
   "Implement gRPC service `SERVICE` in current namespace, importing all necessary Java classes and preparing
@@ -123,7 +123,7 @@
          (spec/valid? ::services services)]}
   (let [server (gensym "server")]
     `(do
-       (clojure.core/import* "io.grpc.ServerBuilder")
+      (clojure.core/import* "io.grpc.ServerBuilder")
        (let [~server (ServerBuilder/forPort ~port)]
          ~@(map (fn [[ns service-name]]
                   `(do

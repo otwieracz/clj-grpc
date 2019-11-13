@@ -1,4 +1,4 @@
-(defproject clj-grpc "0.1.0"
+(defproject clj-grpc "0.1.1"
   :description "A Clojure library designed to provide hassle-free, ready to go gRPC experience without ton of preparations and Java code."
   :url "https://github.com/otwieracz/clj-grpc"
   :license {:name "Eclipse Public License"
