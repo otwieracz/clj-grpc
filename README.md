@@ -101,7 +101,7 @@ message Example {
   :java-outer-classname "ClientProto" )
 
 ;; define RPC method `getExample` returning only one example
-(defrpc getManualMeasurement [_this _req res]
+(defrpc getExample [_this _req res]
   ;;
   ;; do some code here
   ;;
@@ -115,7 +115,7 @@ message Example {
 ;; Another example of method, this time `server-streaming`.
 ;; Implemenation has nothing specific about it, just call `on-next` multiple times
 
-(defrpc getManualMeasurements [_this _req res]
+(defrpc getAllExamples [_this _req res]
   (dotimes [x 10]
     (on-next "Example" res
            {:name                  (str "Name " x)

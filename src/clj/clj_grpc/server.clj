@@ -6,6 +6,7 @@
   (:import [io.grpc ServerBuilder]))
 
 (defonce grpc-java-bindings-per-ns (atom {}))
+(defonce grpc-services (atom []))
 
 (spec/def ::port int?)
 
@@ -80,11 +81,13 @@
   "Implement new RPC function `RPC-NAME` returning type `TYPE` within service being implemented in current namespace. Use `ON-NEXT` function in `BODY` to reply."
   [rpc-function-name [this req res] & body]
   {:pre [(spec/valid? ::rpc-function-name rpc-function-name)]}
-  (let [fn-name (symbol (str "-" rpc-function-name))]
+  (let [fn-name (symbol (str "-" rpc-function-name))
+        req* (gensym)]
     `(do
        ;; define handler function
-       (defn ~fn-name [~this ~req ~res]
-         (do ~@body)
+       (defn ~fn-name [~this ~req* ~res]
+         (let [~req (bean ~req*)]
+           (do ~@body))
          (.onCompleted ~res)))))
 
 
@@ -119,11 +122,10 @@
 (defmacro make-grpc-server
   "Macro for creating new gRPC server componenet.`SERVICES` is sequence of vectors `[ns-name service-name]`"
   [port services]
-  {:pre [(spec/valid? ::port port)
-         (spec/valid? ::services services)]}
+  {:pre [(spec/valid? ::port port)]}
   (let [server (gensym "server")]
     `(do
-      (clojure.core/import* "io.grpc.ServerBuilder")
+       (clojure.core/import* "io.grpc.ServerBuilder")
        (let [~server (ServerBuilder/forPort ~port)]
          ~@(map (fn [[ns service-name]]
                   `(do
