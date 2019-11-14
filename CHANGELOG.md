@@ -1,24 +1,12 @@
 # Change Log
-All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [Unreleased]
+## 0.1.2 - 2019-11-14
 ### Changed
-- Add a new arity to `make-widget-async` to provide a different widget shape.
+- `system` definition is now a function, not a macro (which caused problems in some cases)
+- `req` parameter in `defrpc` is now convenient map with easily-accessible kebab-cased properties of request.
+- No need to provide `services` vector anymore when building `GrpcServer` instance.
 
-## [0.1.1] - 2019-11-06
-### Changed
-- Documentation on how to make the widgets.
-
-### Removed
-- `make-widget-sync` - we're all async, all the time.
-
-### Fixed
-- Fixed widget maker to keep working when daylight savings switches over.
-
-## 0.1.0 - 2019-11-06
+## 0.1.0 - 2019-11-12
 ### Added
-- Files from the new template.
-- Widget maker public API - `make-widget-sync`.
+- Initial release
 
-[Unreleased]: https://github.com/your-name/clj-grpc/compare/0.1.1...HEAD
-[0.1.1]: https://github.com/your-name/clj-grpc/compare/0.1.0...0.1.1

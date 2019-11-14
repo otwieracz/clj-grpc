@@ -2,7 +2,7 @@
 
 A Clojure library designed to provide hassle-free, ready to go gRPC experience without ton of preparations and Java code...
 
-...or just a bunch of macros.
+...or just a bunch of ~~macros~~ functions and macros.
 
 ### Rationale
 
@@ -18,8 +18,7 @@ taking deep dive into all the Java libraries around gRPC, servers like `netty`, 
 problems here and there)
 
 ### TODO
-* Convenient access to request parameters (Tutorial below says nothing about accessing `example_id` from request)
-* Implement helpers or (and) document how to use `clj-grpc` without `danielsz/system`
+* Client-streaming methods
 * Tests - unfortunately, there are none (only thin layer of `spec`). But this is just a bunch of macros developed on real project, so I had no time to build
 full testing workflow.
 
@@ -101,7 +100,7 @@ message Example {
   :java-outer-classname "ClientProto" )
 
 ;; define RPC method `getExample` returning only one example
-(defrpc getExample [_this _req res]
+(defrpc getExample [_this req res]
   ;;
   ;; do some code here
   ;;
@@ -110,7 +109,7 @@ message Example {
   (on-next "Example" res
            {:name                  "Name"
             :description           "Description"
-            :example-id            "example-123123123"}))
+            :example-id            (:example-id req)}))
 
 ;; Another example of method, this time `server-streaming`.
 ;; Implemenation has nothing specific about it, just call `on-next` multiple times
@@ -134,15 +133,16 @@ message Example {
             ...
             )
 
-;; Add `GrpcServer` to system definition. Specify port on which to listen and services, that is sequence of vectors 
-;; specifying pairs of:
-;; - Clojure namespace, where desired gRPC service is implemented (in our case 
+;; Add `GrpcServer` to system definition. Specify port on which to listen. It will automatically server 
+;; all services defined with `IMPLEMENT-GRPC-SERVICE`
 (defsystem dev-system
            [...
-            :my-grpc-server (new-grpc-server :port 5000 :services [["data-engine.grpc.client.core" "Client"]])
+            :my-grpc-server (new-grpc-server :port 5000)
             ...
             ]
 ```
+
+* Otherwise, just call `(start-grpc (make-grpc-server :port <port-number>))`from `clj-grpc.server` and you should be up and running.
 
 Start you system with system's `(start)` and you should have your service running!
 
@@ -159,7 +159,7 @@ See https://cursive-ide.com/userguide/macros.html#customising-symbol-resolution 
 
 ## License
 
-Copyright © 2019 FIXME
+Copyright © 2019 Slawomir Gonet <slawek@otwiera.cz>
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
