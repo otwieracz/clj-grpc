@@ -35,7 +35,7 @@ full testing workflow.
 
 * In `project.clj` add `clj-grpc` to dependencies:
 ```clojure
-[clj-grpc "0.1.0"]
+[clj-grpc "0.1.2"]
 ```
 
 * Configure `lein-protoc` plugin. Please note, that until original `protoc` is fixed, for Clojure 1.9 you have to use 
