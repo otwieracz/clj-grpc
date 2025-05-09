@@ -35,7 +35,7 @@ full testing workflow.
 
 * In `project.clj` add `clj-grpc` to dependencies:
 ```clojure
-[clj-grpc "0.1.0"]
+[clj-grpc "0.1.2"]
 ```
 
 * Configure `lein-protoc` plugin. Please note, that until original `protoc` is fixed, for Clojure 1.9 you have to use 
@@ -48,12 +48,12 @@ full testing workflow.
 ;; decide which version of protoc and grpc-java to use
 :protoc-version "3.10.0"
 :protoc-grpc {:version "1.25.0"}
-:protoc-source-paths ["src/proto"] ;; where to look for `.proto` files
+:proto-source-paths ["src/proto"] ;; where to look for `.proto` files
 :proto-target-path "target/generated-sources/protobuf" ;; where should protoc put generated sources
 :java-source-paths [... "target/generated-sources/protobuf"] ;; point java compiler to newly generated sources
 ```
 
-* Create `example.proto` file in `src/protoc`:
+* Create `example.proto` file in `src/proto`:
 ```proto
 syntax = "proto3";
 
